@@ -15,7 +15,8 @@ export class UsersRepository extends Repository<Users> {
     const newUser = this.create();
     newUser.email = email;
     newUser.name = name;
-    newUser.password = bcrypt.hash(password, bcrypt.genSalt());
+    const salt = await bcrypt.genSalt();
+    newUser.password = await bcrypt.hash(password, salt);
     try {
       await newUser.save();
       delete newUser.password;

@@ -1,23 +1,56 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from './users.service';
+import { UsersRepository } from './users.repository';
+import { CreateUserDto } from './dtos/create-users.dto';
+
+const mockUserRepository = () => ({
+  createUser: jest.fn(),
+});
 
 describe('UsersService', () => {
-  let service: UsersService;
+  let usersRepository;
+  let service;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UsersService],
+      providers: [
+        UsersService,
+        {
+          provide: UsersRepository,
+          useFactory: mockUserRepository,
+        },
+      ],
     }).compile();
 
-    service = module.get<UsersService>(UsersService);
+    service = await module.get<UsersService>(UsersService);
+    usersRepository = await module.get<UsersRepository>(UsersRepository);
   });
 
-  it('Service user should be defined', () => {
+  it('Service and repository user should be defined', () => {
     expect(service).toBeDefined();
+    expect(UsersRepository).toBeDefined();
   });
 
-  it('Should create a user', () => {
-    const user = service.create();
-    expect(user).toBeTruthy();
+  describe('User Test', () => {
+    let mockCreateUserDto: CreateUserDto;
+
+    beforeEach(() => {
+      mockCreateUserDto = {
+        email: 'mock@gmail.com',
+        name: 'mock',
+        password: 'asterix2108',
+        passwordConfirm: 'asterix2108',
+      };
+    });
+
+    it('Should create a user if password is equal', async () => {
+      usersRepository.createUser.mockResolvedValue('mockUser');
+      const user = await service.create(mockCreateUserDto);
+
+      expect(usersRepository.createUser).toHaveBeenCalledWith(
+        mockCreateUserDto,
+      );
+      expect(user).toEqual('mockUser');
+    });
   });
 });

@@ -7,7 +7,7 @@ const mockUserRepository = () => ({
   createUser: jest.fn(),
 });
 
-describe('UsersService', () => {
+describe('Users Test', () => {
   let usersRepository;
   let service;
 

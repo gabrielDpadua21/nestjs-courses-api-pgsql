@@ -69,8 +69,8 @@ describe('Courses Test', () => {
     it('Should update a course', async () => {
       coursesRepository.findByCourseId.mockResolvedValue(new Courses());
       coursesRepository.updateCourse.mockResolvedValue('mockUpdateCourse');
-      const course = await service.update(1, mockUpdateCourseDto);
-      expect(coursesRepository.findByCourseId).toHaveBeenLastCalledWith(1);
+      const course = await service.update('1', mockUpdateCourseDto);
+      expect(coursesRepository.findByCourseId).toHaveBeenLastCalledWith('1');
       expect(coursesRepository.updateCourse).toHaveBeenLastCalledWith(
         new Courses(),
         mockUpdateCourseDto,
@@ -88,14 +88,14 @@ describe('Courses Test', () => {
 
       it('Should return a course by id', async () => {
         coursesRepository.findByCourseId.mockResolvedValue(courseReturn);
-        const course = await service.findOne(1);
-        expect(coursesRepository.findByCourseId).toHaveBeenLastCalledWith(1);
+        const course = await service.findOne('1');
+        expect(coursesRepository.findByCourseId).toHaveBeenLastCalledWith('1');
         expect(course.id).toBe('1');
       });
 
       it('Should return a course by id', async () => {
         coursesRepository.findAllCourses.mockResolvedValue([courseReturn]);
-        const course = await service.findAll(1);
+        const course = await service.findAll();
         expect(coursesRepository.findAllCourses).toHaveBeenLastCalledWith();
         expect(course.length).toBe(1);
       });

@@ -43,7 +43,7 @@ export class CoursesRepository extends Repository<Courses> {
     }
   }
 
-  async findByCourseId(id: number): Promise<Courses> {
+  async findByCourseId(id: string): Promise<Courses> {
     const course = await this.findOne(id);
     if (!course) throw new NotFoundException('Course not found');
     return course;

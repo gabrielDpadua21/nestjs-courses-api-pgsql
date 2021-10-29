@@ -15,12 +15,12 @@ export class CoursesService {
     return this.coursesRepository.createCourse(course);
   }
 
-  async update(id: number, courseRequest: CreateCoursesDto): Promise<Courses> {
+  async update(id: string, courseRequest: CreateCoursesDto): Promise<Courses> {
     const course = await this.coursesRepository.findByCourseId(id);
     return this.coursesRepository.updateCourse(course, courseRequest);
   }
 
-  async findOne(id: number): Promise<Courses> {
+  async findOne(id: string): Promise<Courses> {
     return this.coursesRepository.findByCourseId(id);
   }
 

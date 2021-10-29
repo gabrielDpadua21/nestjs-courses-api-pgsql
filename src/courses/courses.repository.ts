@@ -1,4 +1,7 @@
-import { InternalServerErrorException } from '@nestjs/common';
+import {
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
 import { Courses } from './courses.entity';
 import { CreateCoursesDto } from './dtos/create-courses.dto';
@@ -16,7 +19,38 @@ export class CoursesRepository extends Repository<Courses> {
       await newCourse.save();
       return newCourse;
     } catch (err) {
-      throw new InternalServerErrorException('Error to save in database');
+      throw new InternalServerErrorException(
+        `Error to save in database: ${err}`,
+      );
     }
+  }
+
+  async updateCourse(
+    course: Courses,
+    courseRequest: CreateCoursesDto,
+  ): Promise<Courses> {
+    try {
+      const { name, description, workload } = courseRequest;
+      course.name = name;
+      course.description = description;
+      course.workload = workload;
+      await course.save();
+      return course;
+    } catch (err) {
+      throw new InternalServerErrorException(
+        `Error to save in database: ${err}`,
+      );
+    }
+  }
+
+  async findByCourseId(id: number): Promise<Courses> {
+    const course = await this.findOne(id);
+    if (!course) throw new NotFoundException('Course not found');
+    return course;
+  }
+
+  async findAllCourses(): Promise<Courses[]> {
+    const courses = await this.find();
+    return courses || [];
   }
 }

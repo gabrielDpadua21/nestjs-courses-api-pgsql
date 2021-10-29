@@ -14,4 +14,17 @@ export class CoursesService {
   async create(course: CreateCoursesDto): Promise<Courses> {
     return this.coursesRepository.createCourse(course);
   }
+
+  async update(id: number, courseRequest: CreateCoursesDto): Promise<Courses> {
+    const course = await this.coursesRepository.findByCourseId(id);
+    return this.coursesRepository.updateCourse(course, courseRequest);
+  }
+
+  async findOne(id: number): Promise<Courses> {
+    return this.coursesRepository.findByCourseId(id);
+  }
+
+  async findAll(): Promise<Courses[]> {
+    return this.coursesRepository.findAllCourses();
+  }
 }

@@ -27,4 +27,9 @@ export class UsersRepository extends Repository<Users> {
       throw new InternalServerErrorException('Error to save in database');
     }
   }
+
+  async findAllUsers(): Promise<Users[]> {
+    const users = await this.find();
+    return users || [];
+  }
 }

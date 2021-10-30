@@ -93,7 +93,7 @@ describe('Courses Test', () => {
         expect(course.id).toBe('1');
       });
 
-      it('Should return a course by id', async () => {
+      it('Should return all courses', async () => {
         coursesRepository.findAllCourses.mockResolvedValue([courseReturn]);
         const course = await service.findAll();
         expect(coursesRepository.findAllCourses).toHaveBeenLastCalledWith();

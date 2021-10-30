@@ -21,6 +21,9 @@ export class Courses extends BaseEntity {
   @Column({ nullable: false, type: 'varchar', length: 300 })
   description: string;
 
+  @Column({ nullable: true, type: 'varchar', length: 300 })
+  imageUrl: string;
+
   @Column({ type: 'integer' })
   workload: number;
 

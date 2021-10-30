@@ -2,9 +2,12 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from './users.service';
 import { UsersRepository } from './users.repository';
 import { CreateUserDto } from './dtos/create-users.dto';
+import { CreateInternalUserDto } from './dtos/create-internal-user.dto';
+import { Users } from './users.entity';
 
 const mockUserRepository = () => ({
   createUser: jest.fn(),
+  findAllUsers: jest.fn(),
 });
 
 describe('Users Test', () => {
@@ -33,14 +36,24 @@ describe('Users Test', () => {
 
   describe('User Test', () => {
     let mockCreateUserDto: CreateUserDto;
+    let mockInternalUserDto: CreateInternalUserDto;
+    let userReturn: Users;
 
     beforeEach(() => {
-      mockCreateUserDto = {
-        email: 'mock@gmail.com',
-        name: 'mock',
-        password: 'asterix2108',
-        passwordConfirm: 'asterix2108',
-      };
+      mockCreateUserDto = new CreateUserDto(
+        'mock@gmail.com',
+        'mock',
+        'asterix2108',
+        'asterix2108',
+      );
+      mockInternalUserDto = new CreateInternalUserDto(
+        mockCreateUserDto.email,
+        mockCreateUserDto.name,
+      );
+      userReturn = new Users();
+      userReturn.id = '1';
+      userReturn.name = 'Teste';
+      userReturn.email = 'test@gmail.com';
     });
 
     it('Should create a user if password is equal', async () => {
@@ -51,6 +64,24 @@ describe('Users Test', () => {
         mockCreateUserDto,
       );
       expect(user).toEqual('mockUser');
+    });
+
+    it('Should create a user internal', async () => {
+      usersRepository.createUser.mockResolvedValue('mockInternalUser');
+      const user = await service.createInternal(mockInternalUserDto);
+      mockCreateUserDto.password = '123mudar';
+      mockCreateUserDto.passwordConfirm = '123mudar';
+      expect(usersRepository.createUser).toHaveBeenCalledWith(
+        mockCreateUserDto,
+      );
+      expect(user).toEqual('mockInternalUser');
+    });
+
+    it('Should return a users list', async () => {
+      usersRepository.findAllUsers.mockResolvedValue([userReturn]);
+      const users = await service.findAll();
+      expect(usersRepository.findAllUsers).toHaveBeenCalledWith();
+      expect(users.length).toBe(1);
     });
   });
 });

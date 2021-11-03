@@ -9,6 +9,7 @@ const mockCourseRepository = () => ({
   findByCourseId: jest.fn(),
   updateCourse: jest.fn(),
   findAllCourses: jest.fn(),
+  deleteCourse: jest.fn(),
 });
 
 describe('Courses Test', () => {
@@ -98,6 +99,15 @@ describe('Courses Test', () => {
         const course = await service.findAll();
         expect(coursesRepository.findAllCourses).toHaveBeenLastCalledWith();
         expect(course.length).toBe(1);
+      });
+    });
+
+    describe('Courses delete teste', () => {
+      it('Should delete if courses exists', async () => {
+        coursesRepository.deleteCourse.mockResolvedValue(1);
+        const result = await service.delete('1');
+        expect(coursesRepository.deleteCourse).toHaveBeenCalledWith('1');
+        expect(result).toBeTruthy();
       });
     });
   });

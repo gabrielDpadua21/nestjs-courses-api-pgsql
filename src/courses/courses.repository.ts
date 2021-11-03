@@ -53,4 +53,10 @@ export class CoursesRepository extends Repository<Courses> {
     const courses = await this.find();
     return courses || [];
   }
+
+  async deleteCourse(userId: string): Promise<number> {
+    console.log(typeof userId);
+    const result = await this.delete({ id: userId });
+    return result.affected;
+  }
 }

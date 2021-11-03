@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Courses } from './courses.entity';
 import { CoursesRepository } from './courses.repository';
@@ -26,5 +26,11 @@ export class CoursesService {
 
   async findAll(): Promise<Courses[]> {
     return this.coursesRepository.findAllCourses();
+  }
+
+  async delete(userId: string): Promise<boolean> {
+    const result = await this.coursesRepository.deleteCourse(userId);
+    if (result === 0) throw new NotFoundException('Course not found');
+    return true;
   }
 }

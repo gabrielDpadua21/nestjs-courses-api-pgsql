@@ -9,12 +9,13 @@ import { CreateCoursesDto } from './dtos/create-courses.dto';
 @EntityRepository(Courses)
 export class CoursesRepository extends Repository<Courses> {
   async createCourse(course: CreateCoursesDto): Promise<Courses> {
-    const { name, description, workload } = course;
+    const { name, description, workload, imageUrl } = course;
 
     const newCourse = this.create();
     newCourse.name = name;
     newCourse.description = description;
     newCourse.workload = workload;
+    newCourse.imageUrl = imageUrl || null;
     try {
       await newCourse.save();
       return newCourse;

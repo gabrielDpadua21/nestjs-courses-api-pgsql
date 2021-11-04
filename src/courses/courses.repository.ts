@@ -56,7 +56,6 @@ export class CoursesRepository extends Repository<Courses> {
   }
 
   async deleteCourse(userId: string): Promise<number> {
-    console.log(typeof userId);
     const result = await this.delete({ id: userId });
     return result.affected;
   }

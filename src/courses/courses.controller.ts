@@ -40,7 +40,7 @@ export class CoursesController {
   }
 
   @Get('/:id')
-  async get(@Param('/:id') id: string): Promise<ReturnCoursesDto> {
+  async get(@Param('id') id: string): Promise<ReturnCoursesDto> {
     const course = await this.coursesService.findOne(id);
     return {
       course,
